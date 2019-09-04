@@ -18,14 +18,11 @@ class NaDict(dict):
         return r
 
     def _as_dict(self, parent, children):
-        if not children:
-            return {}
+        if isinstance(children, dict):
+            r = {}
+            for k, v in children.items():
+                r.update(self._as_dict('.'.join([parent, k]), v))
+            return r
         else:
-            if isinstance(children, dict):
-                r = {}
-                for k, v in children.items():
-                    r.update(self._as_dict('.'.join([parent, k]), v))
-                return r
-            else:
-                return {parent: children}
+            return {parent: children}
 
